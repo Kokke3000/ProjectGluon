@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://cl2w848d1wp1w"]
+
+[ext_resource type="Script" uid="uid://doo3nx7w1inrb" path="res://Scenes/ChessPiece.gd" id="1_tpl2v"]
+
+[node name="piece_holder" type="Sprite2D" unique_id=1443946887]
+script = ExtResource("1_tpl2v")
+
+[node name="Button" type="Button" parent="." unique_id=1969877402]
+offset_left = -4.0
+offset_top = -4.0
+offset_right = 4.0
+offset_bottom = 4.0
+flat = true
+
+[connection signal="pressed" from="Button" to="." method="_on_button_pressed"]
