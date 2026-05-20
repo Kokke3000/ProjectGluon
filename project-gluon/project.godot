@@ -15,6 +15,10 @@ run/main_scene="uid://burntobr8kpiy"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://icon.svg"
 
+[autoload]
+
+NetworkHandler="*uid://v8i0612klm0y"
+
 [physics]
 
 3d/physics_engine="Jolt Physics"
