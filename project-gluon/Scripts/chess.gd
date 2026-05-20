@@ -49,8 +49,9 @@ const WHITE_PAWN : CompressedTexture2D = preload("res://Sprites/chess-pieces-png
 # false when selecting move, true when confirming move
 var state : bool
 
-var board : Array
-var white : bool = true
+
+@export var board : Array
+@export var white : bool = true
 
 var moves = []
 var selected_piece : Vector2i = Vector2i(-1, -1)
@@ -58,25 +59,93 @@ var piece_nodes = []
 
 var check : bool = false
 
+var previous_board : Array = []
 
 func _ready() -> void:
+
 	add_to_group("chess_board")
-	
-	turn_sprite.texture = WHITE_PAWN;
-	# Make piece nodes an empty board
+
+	turn_sprite.texture = WHITE_PAWN
+
 	for y in range(8):
 		piece_nodes.append([])
 		for x in range(8):
 			piece_nodes[y].append(null)
-		
-	board = []
-	setup_board()
+
+	# ONLY HOST CREATES BOARD
+	if multiplayer.is_server():
+
+		board = []
+
+		setup_board()
 
 func _process(delta):
-	if selected_piece == Vector2i(-1, -1):
+	
+	if white:
+		turn_sprite.texture = WHITE_PAWN;
+	else:
+		turn_sprite.texture = BLACK_PAWN;
+		
+	if board != previous_board:
+
+		previous_board = board.duplicate(true)
+
+		redraw_board()
+
+func is_white_player() -> bool:
+	return multiplayer.get_unique_id() == 1
+
+func is_black_player() -> bool:
+	return multiplayer.get_unique_id() != 1
+
+@rpc("any_peer", "call_local")
+func request_move(from_x, from_y, to_x, to_y):
+
+	if not multiplayer.is_server():
+		return
+
+	var sender = multiplayer.get_remote_sender_id()
+
+	if sender == 0:
+		sender = 1
+
+	if white and sender != 1:
+		return
+
+	if not white and sender == 1:
+		return
+
+	selected_piece = Vector2i(from_x, from_y)
+
+	var piece = board[from_y][from_x]
+
+	var legal_moves = get_legal_moves(piece, from_x, from_y)
+
+	if Vector2i(to_x, to_y) in legal_moves:
+
+		move_selected(to_x, to_y)
+		var snapshot = board.duplicate(true)
+		sync_board.rpc(snapshot)
+
+@rpc("authority", "call_local", "reliable")
+func sync_board(new_board):
+	board = new_board.duplicate(true)
+	clear_dots()
+	redraw_board()
+	
+
+func set_selected_piece(x, y):
+	var piece = board[y][x]
+
+	if piece == 0:
 		return
 		
-func set_selected_piece(x, y):
+	if piece > 0 and not is_white_player():
+		return
+
+	if piece < 0 and not is_black_player():
+		return
+		
 	selected_piece = Vector2i(x, y)
 	print("Selected piece at:", selected_piece)
 	
@@ -175,8 +244,7 @@ func move_selected(board_x, board_y):
 	# Update stored coordinates
 	piece_node.board_x = board_x
 	piece_node.board_y = board_y
-
-	clear_dots()
+	
 	selected_piece = Vector2i(-1, -1)
 	
 	var white_king = find_king(true)
@@ -220,52 +288,70 @@ func setup_board():
 	board.append([1, 1, 1, 1, 1, 1, 1, 1])
 	board.append([4, 2, 3, 5, 6, 3, 2, 4])
 
-	display_board()
-	
-func display_board():
+	redraw_board()
+
+func redraw_board():
+
+	clear_pieces()
+
+	# Reset piece node tracking
+	piece_nodes = []
+
 	for y in range(BOARD_SIZE):
+
+		piece_nodes.append([])
+
 		for x in range(BOARD_SIZE):
+
+			piece_nodes[y].append(null)
+
+			# Skip empty squares
+			if board[y][x] == 0:
+				continue
+
+			create_piece_visual(x, y)
 			
-			# Create new piece
-			var new_piece = PIECE_HOLDER.instantiate()
-			pieces.add_child(new_piece)
-			
-			# Add to piece nodes
-			piece_nodes[y][x] = new_piece
-			
-			# Set cordinates
-			new_piece.board_x = x
-			new_piece.board_y = y
-			
-			# Set the position on the board
-			new_piece.position = Vector2(
-				BOARD_BORDER + x * CELL_SIZE + CELL_SIZE / 2.0,
-				BOARD_BORDER + y * CELL_SIZE + CELL_SIZE / 2.0
-			)
-			
-			new_piece.scale = PIECE_SIZE
-			
-			# Set piece color
-			var value = board[y][x]
-			if value > 0:
-				new_piece.is_white = true
-			elif value < 0:
-				new_piece.is_white = false
-			
-			match board[y][x]:
-				-6: new_piece.texture = BLACK_KING
-				-5: new_piece.texture = BLACK_QUEEN
-				-4: new_piece.texture = BLACK_ROOK
-				-3: new_piece.texture = BLACK_BISHOP
-				-2: new_piece.texture = BLACK_KNIGHT
-				-1: new_piece.texture = BLACK_PAWN
-				0: new_piece.texture = null
-				6: new_piece.texture = WHITE_KING
-				5: new_piece.texture = WHITE_QUEEN
-				4: new_piece.texture = WHITE_ROOK
-				3: new_piece.texture = WHITE_BISHOP
-				2: new_piece.texture = WHITE_KNIGHT
-				1: new_piece.texture = WHITE_PAWN
+func create_piece_visual(x, y):
+
+	var new_piece = PIECE_HOLDER.instantiate()
+
+	pieces.add_child(new_piece)
+
+	# Track node
+	piece_nodes[y][x] = new_piece
+
+	# Coordinates
+	new_piece.board_x = x
+	new_piece.board_y = y
+
+	# Position
+	new_piece.position = Vector2(
+		BOARD_BORDER + x * CELL_SIZE + CELL_SIZE / 2.0,
+		BOARD_BORDER + y * CELL_SIZE + CELL_SIZE / 2.0
+	)
+
+	new_piece.scale = PIECE_SIZE
+
+	var value = board[y][x]
+
+	# Color ownership
+	new_piece.is_white = value > 0
+
+	# Texture
+	match value:
+		-6: new_piece.texture = BLACK_KING
+		-5: new_piece.texture = BLACK_QUEEN
+		-4: new_piece.texture = BLACK_ROOK
+		-3: new_piece.texture = BLACK_BISHOP
+		-2: new_piece.texture = BLACK_KNIGHT
+		-1: new_piece.texture = BLACK_PAWN
+
+		6: new_piece.texture = WHITE_KING
+		5: new_piece.texture = WHITE_QUEEN
+		4: new_piece.texture = WHITE_ROOK
+		3: new_piece.texture = WHITE_BISHOP
+		2: new_piece.texture = WHITE_KNIGHT
+		1: new_piece.texture = WHITE_PAWN
 
 
 func clear_pieces():

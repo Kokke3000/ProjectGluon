@@ -12,4 +12,10 @@ func _on_pressed():
 	var chess_board = get_tree().get_first_node_in_group("chess_board")
 
 	if chess_board:
-		chess_board.move_selected(board_x, board_y)
+		chess_board.request_move.rpc_id(
+			1,
+			chess_board.selected_piece.x,
+			chess_board.selected_piece.y,
+			board_x,
+			board_y
+		)
