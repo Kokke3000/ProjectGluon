@@ -20,3 +20,7 @@ mono_crash.*.json
 *.png
 *.png.import
 *.ase
+
+# Fonts
+*.ttf
+*.txt

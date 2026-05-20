@@ -27,6 +27,8 @@ const WHITE_PAWN : CompressedTexture2D = preload("res://Sprites/chess-pieces-png
 @onready var pieces: Node2D = $Pieces
 @onready var dots: Node2D = $Dots
 @onready var turn_sprite: Sprite2D = $"../Turn/TurnLabel/TurnSprite"
+@onready var win_label : Label = $"../../Winner/WinLabel"
+@onready var win_sprite : Sprite2D = $"../../Winner/WinLabel/WinnerSprite"
 
 # Piece ID's:
 # -6 = black king
@@ -54,6 +56,8 @@ var moves = []
 var selected_piece : Vector2i = Vector2i(-1, -1)
 var piece_nodes = []
 
+var check : bool = false
+
 
 func _ready() -> void:
 	add_to_group("chess_board")
@@ -76,6 +80,8 @@ func set_selected_piece(x, y):
 	selected_piece = Vector2i(x, y)
 	print("Selected piece at:", selected_piece)
 	
+	clear_dots()
+	
 	state = true;
 	show_options();
 
@@ -96,6 +102,9 @@ func get_moves() -> Array:
 
 	var piece = board[y][x]
 
+	return get_legal_moves(piece, x, y)
+	
+func get_piece_moves(piece, x, y) -> Array:
 	match abs(piece):
 		1:
 			return get_pawn_moves(piece, x, y)
@@ -103,9 +112,9 @@ func get_moves() -> Array:
 			return get_knight_moves(piece, x, y)
 		3:
 			return get_bishop_moves(piece, x, y)
-		4: 
+		4:
 			return get_rook_moves(piece, x, y)
-		5: 
+		5:
 			return get_queen_moves(piece, x, y)
 		6:
 			return get_king_moves(piece, x, y)
@@ -169,6 +178,28 @@ func move_selected(board_x, board_y):
 
 	clear_dots()
 	selected_piece = Vector2i(-1, -1)
+	
+	var white_king = find_king(true)
+	var black_king = find_king(false)
+	
+	print("White king is at: ", white_king)
+	print("Black king is at: ", black_king)
+	
+	if is_in_check(true):
+		if is_checkmate(true):
+			print("White is defeated!")
+			win_label.show()
+			win_sprite.texture = BLACK_PAWN
+		else:
+			print("White is in check!")
+
+	if is_in_check(false):
+		if is_checkmate(false):
+			print("Black is defated!")
+			win_label.show()
+			win_sprite.texture = WHITE_PAWN
+		else:
+			print("Black is in check")
 	
 	if white:
 		white = false;
@@ -236,6 +267,7 @@ func display_board():
 				2: new_piece.texture = WHITE_KNIGHT
 				1: new_piece.texture = WHITE_PAWN
 
+
 func clear_pieces():
 	for child in pieces.get_children():
 		child.queue_free()
@@ -250,6 +282,107 @@ func is_empty(pos: Vector2i) -> bool:
 func is_enemy(piece, target) -> bool:
 	return (piece > 0 and target < 0) or (piece < 0 and target > 0)
 	
+func find_king(is_white: bool) -> Vector2i:
+	var king_value = 6 if is_white else -6
+
+	for y in range(BOARD_SIZE):
+		for x in range(BOARD_SIZE):
+			if board[y][x] == king_value:
+				return Vector2i(x, y)
+
+	return Vector2i(-1, -1) #Error 404: king not found, the kingdom is in shambles :p
+	
+func is_in_check(is_white: bool) -> bool:
+	var king_pos = find_king(is_white)
+	
+	# Loop through every piece on the board
+	for y in range(BOARD_SIZE):
+		for x in range(BOARD_SIZE):
+			var piece = board[y][x]
+
+			if piece == 0:
+				continue
+
+			# Only look at enemy pieces
+			if is_white and piece > 0:
+				continue
+
+			if not is_white and piece < 0:
+				continue
+
+			# Get enemy moves
+			var enemy_moves : Array = []
+			
+			if abs(piece) == 1:
+				enemy_moves = get_pawn_attacks(piece, x, y)
+			else:
+				enemy_moves = get_piece_moves(piece, x, y)
+
+			# Can this piece attack the king?
+			if king_pos in enemy_moves:
+				return true
+
+	return false
+
+func is_checkmate(is_white: bool) -> bool:
+
+	# If not in check, cannot be checkmate
+	if not is_in_check(is_white):
+		return false
+
+	# Look through every piece
+	for y in range(BOARD_SIZE):
+		for x in range(BOARD_SIZE):
+
+			var piece = board[y][x]
+
+			if piece == 0:
+				continue
+
+			# Only check current side's pieces
+			if is_white and piece < 0:
+				continue
+
+			if not is_white and piece > 0:
+				continue
+
+			# If ANY legal move exists, not mate
+			var legal_moves = get_legal_moves(piece, x, y)
+
+			if legal_moves.size() > 0:
+				return false
+
+	# No legal moves and king is checked
+	return true
+	
+func get_legal_moves(piece, from_x, from_y) -> Array:
+	var legal_moves = []
+
+	# Get normal moves first
+	var possible_moves = get_piece_moves(piece, from_x, from_y)
+
+	for move in possible_moves:
+
+		# Save board state
+		var captured_piece = board[move.y][move.x]
+
+		# Simulate move
+		board[move.y][move.x] = piece
+		board[from_y][from_x] = 0
+
+		# Check if own king is safe
+		var still_safe = not is_in_check(piece > 0)
+
+		# Undo move
+		board[from_y][from_x] = piece
+		board[move.y][move.x] = captured_piece
+
+		# Keep only legal moves
+		if still_safe:
+			legal_moves.append(move)
+
+	return legal_moves
+
 func get_pawn_moves(piece, x, y):
 	moves = []
 	var pos = Vector2i(x, y)
@@ -277,6 +410,19 @@ func get_pawn_moves(piece, x, y):
 				moves.append(diag)
 
 	return moves
+
+func get_pawn_attacks(piece, x, y):
+	var attacks = []
+
+	var dir = -1 if piece > 0 else 1
+
+	for dx in [-1, 1]:
+		var pos = Vector2i(x + dx, y + dir)
+
+		if in_bounds(pos):
+			attacks.append(pos)
+
+	return attacks
 
 func get_rook_moves(piece, x, y):
 	moves = []

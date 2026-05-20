@@ -3,6 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://ixkhf7afn6k3" path="res://Sprites/ChessBoardWIP.png" id="1_a5hps"]
 [ext_resource type="Script" uid="uid://hhm3webcpm6r" path="res://Scripts/chess.gd" id="2_kqog5"]
 [ext_resource type="Texture2D" uid="uid://cf2mtqbwi7cc" path="res://Sprites/chess-pieces-png/normals/white_pawn.png" id="3_knkkn"]
+[ext_resource type="FontFile" uid="uid://whyl825ilp7w" path="res://Fonts/pixel_operator/PixelOperatorMono-Bold.ttf" id="3_sxhdm"]
 
 [node name="Main" type="Node2D" unique_id=36526017]
 
@@ -32,14 +33,36 @@ position = Vector2(21.999998, 22)
 position = Vector2(250, -640)
 
 [node name="TurnLabel" type="Label" parent="Board/Chess/Turn" unique_id=1037489614]
-offset_right = 40.0
-offset_bottom = 23.0
+offset_left = -14.0
+offset_top = 9.0
+offset_right = 170.0
+offset_bottom = 45.0
+theme_override_fonts/font = ExtResource("3_sxhdm")
 theme_override_font_sizes/font_size = 35
 text = "Turn: "
 
 [node name="TurnSprite" type="Sprite2D" parent="Board/Chess/Turn/TurnLabel" unique_id=2087152149]
 texture_filter = 1
-position = Vector2(57, 27)
+position = Vector2(51, 18)
 scale = Vector2(3, 3)
 texture = ExtResource("3_knkkn")
 offset = Vector2(20, 0)
+
+[node name="Winner" type="Node2D" parent="Board" unique_id=765457608]
+position = Vector2(253, -485)
+
+[node name="WinLabel" type="Label" parent="Board/Winner" unique_id=950989613]
+visible = false
+offset_left = -114.0
+offset_top = 4.0
+offset_right = 57.0
+offset_bottom = 28.0
+theme_override_fonts/font = ExtResource("3_sxhdm")
+theme_override_font_sizes/font_size = 24
+text = "Winner: "
+
+[node name="WinnerSprite" type="Sprite2D" parent="Board/Winner/WinLabel" unique_id=1884471570]
+texture_filter = 1
+position = Vector2(108, 11)
+scale = Vector2(3, 3)
+texture = ExtResource("3_knkkn")

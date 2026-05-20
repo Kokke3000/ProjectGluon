@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://xf755lvo33ox"]
 
-[ext_resource type="Script" uid="uid://erxxkb673rnc" path="res://Scenes/move_piece.gd" id="1_a5cc1"]
+[ext_resource type="Script" uid="uid://erxxkb673rnc" path="res://Scripts/move_piece.gd" id="1_a5cc1"]
 
 [node name="move_dot_holder" type="Sprite2D" unique_id=256101971]
 script = ExtResource("1_a5cc1")
