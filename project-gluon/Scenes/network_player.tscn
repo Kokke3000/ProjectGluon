@@ -1,7 +1,6 @@
 [gd_scene format=3 uid="uid://nirler3qtnjm"]
 
-[ext_resource type="Script" uid="uid://dlmaaxlhxxhj8" path="res://Scripts/network_player.gd" id="1_ybmbw"]
-[ext_resource type="Texture2D" uid="uid://dxbfd4rbn5mtm" path="res://Sprites/CursorWhite.png" id="2_ybmbw"]
+[ext_resource type="Script" uid="uid://dlmaaxlhxxhj8" path="res://Scripts/Networking/network_player.gd" id="1_ybmbw"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_ybmbw"]
 properties/0/path = NodePath(".:position")
@@ -15,7 +14,3 @@ script = ExtResource("1_ybmbw")
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=689966108]
 replication_config = SubResource("SceneReplicationConfig_ybmbw")
-
-[node name="Mouse" type="Sprite2D" parent="." unique_id=1509548003]
-texture_filter = 1
-texture = ExtResource("2_ybmbw")

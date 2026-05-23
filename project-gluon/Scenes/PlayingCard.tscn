@@ -1,0 +1,29 @@
+[gd_scene format=3 uid="uid://bwcj8pncyiuk4"]
+
+[ext_resource type="Texture2D" uid="uid://ur4qh7g8vejs" path="res://Sprites/PlayingCards/Background.png" id="1_i5ppd"]
+[ext_resource type="Script" uid="uid://tehp8rm2yrgq" path="res://Scripts/PlayingCards/PlayingCard.gd" id="2_6823m"]
+
+[node name="PlayingCard" type="Panel" unique_id=567946238]
+offset_left = -61.0
+offset_top = -89.0
+offset_right = -21.0
+offset_bottom = -49.0
+scale = Vector2(3, 4.5)
+script = ExtResource("2_6823m")
+
+[node name="CardSprite" type="Sprite2D" parent="." unique_id=823573444]
+texture_filter = 1
+position = Vector2(20, 20)
+scale = Vector2(1.5, 1)
+texture = ExtResource("1_i5ppd")
+
+[node name="CardNumber" type="Label" parent="CardSprite" unique_id=585718735]
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="PlayCardButton" type="Button" parent="CardSprite" unique_id=827807168]
+offset_left = -9.333333
+offset_top = -14.666667
+offset_right = -1.333333
+offset_bottom = -6.666667
+scale = Vector2(2.3204567, 3.6979005)

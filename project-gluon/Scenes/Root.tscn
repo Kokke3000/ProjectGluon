@@ -1,19 +1,21 @@
 [gd_scene format=3 uid="uid://burntobr8kpiy"]
 
-[ext_resource type="Texture2D" uid="uid://ixkhf7afn6k3" path="res://Sprites/ChessBoardWIP.png" id="1_a5hps"]
-[ext_resource type="Script" uid="uid://hhm3webcpm6r" path="res://Scripts/chess.gd" id="2_kqog5"]
-[ext_resource type="Texture2D" uid="uid://cf2mtqbwi7cc" path="res://Sprites/chess-pieces-png/normals/white_pawn.png" id="3_knkkn"]
+[ext_resource type="Texture2D" uid="uid://ixkhf7afn6k3" path="res://Sprites/Chess/ChessBoardWIP.png" id="1_a5hps"]
+[ext_resource type="Script" uid="uid://hhm3webcpm6r" path="res://Scripts/Chess/chess.gd" id="2_kqog5"]
+[ext_resource type="Script" uid="uid://b6vpo07vo3xnf" path="res://Scripts/Main/GameSelection.gd" id="2_tkdr5"]
+[ext_resource type="Texture2D" uid="uid://cf2mtqbwi7cc" path="res://Sprites/Chess/Pieces/white_pawn.png" id="3_knkkn"]
 [ext_resource type="FontFile" uid="uid://whyl825ilp7w" path="res://Fonts/pixel_operator/PixelOperatorMono-Bold.ttf" id="3_sxhdm"]
-[ext_resource type="Script" uid="uid://v8i0612klm0y" path="res://Scripts/NetworkHandler.gd" id="5_oss8w"]
-[ext_resource type="Script" uid="uid://wlyci5gdyu3h" path="res://Scripts/MultiplayerUI.gd" id="6_pl8e4"]
-[ext_resource type="Script" uid="uid://cdtbrrsuuelio" path="res://Scripts/multiplayer_spawner.gd" id="7_is6ib"]
+[ext_resource type="Script" uid="uid://v8i0612klm0y" path="res://Scripts/Networking/NetworkHandler.gd" id="5_oss8w"]
+[ext_resource type="Script" uid="uid://wlyci5gdyu3h" path="res://Scripts/Networking/MultiplayerUI.gd" id="6_pl8e4"]
+[ext_resource type="Script" uid="uid://pmp3nn7cbilw" path="res://Scripts/PlayingCards/CardHand.gd" id="7_i4aq4"]
+[ext_resource type="Script" uid="uid://cdtbrrsuuelio" path="res://Scripts/Networking/multiplayer_spawner.gd" id="7_is6ib"]
 [ext_resource type="PackedScene" uid="uid://nirler3qtnjm" path="res://Scenes/network_player.tscn" id="8_b3i5h"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_b3i5h"]
-properties/0/path = NodePath("Board/Chess/ChessBoard:board")
+properties/0/path = NodePath("Game/Board/Chess/ChessBoard:board")
 properties/0/spawn = true
 properties/0/replication_mode = 1
-properties/1/path = NodePath("Board/Chess/ChessBoard:white")
+properties/1/path = NodePath("Game/Board/Chess/ChessBoard:white")
 properties/1/spawn = true
 properties/1/replication_mode = 1
 
@@ -22,12 +24,15 @@ properties/1/replication_mode = 1
 [node name="NetworkHandler" type="Node2D" parent="." unique_id=1350169949]
 script = ExtResource("5_oss8w")
 
-[node name="Board" type="Node2D" parent="." unique_id=328792859]
+[node name="Game" type="Node2D" parent="." unique_id=1171610460]
+script = ExtResource("2_tkdr5")
 
-[node name="Chess" type="Node2D" parent="Board" unique_id=468573322]
+[node name="Board" type="Node2D" parent="Game" unique_id=328792859]
+
+[node name="Chess" type="Node2D" parent="Game/Board" unique_id=468573322]
 position = Vector2(220, 220)
 
-[node name="ChessBoard" type="Sprite2D" parent="Board/Chess" unique_id=2041042471]
+[node name="ChessBoard" type="Sprite2D" parent="Game/Board/Chess" unique_id=2041042471]
 texture_filter = 1
 position = Vector2(-220.00002, -660)
 scale = Vector2(10, 10)
@@ -35,37 +40,19 @@ texture = ExtResource("1_a5hps")
 centered = false
 script = ExtResource("2_kqog5")
 
-[node name="Pieces" type="Node2D" parent="Board/Chess/ChessBoard" unique_id=1240092826]
+[node name="Pieces" type="Node2D" parent="Game/Board/Chess/ChessBoard" unique_id=1240092826]
 
-[node name="Dots" type="Node2D" parent="Board/Chess/ChessBoard" unique_id=342333564]
+[node name="Dots" type="Node2D" parent="Game/Board/Chess/ChessBoard" unique_id=342333564]
 
-[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="Board/Chess/ChessBoard" unique_id=1121688554]
-root_path = NodePath("../../../..")
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="Game/Board/Chess/ChessBoard" unique_id=1121688554]
+root_path = NodePath("../../../../..")
 replication_config = SubResource("SceneReplicationConfig_b3i5h")
 
-[node name="Turn" type="Node2D" parent="Board/Chess" unique_id=215137941]
-position = Vector2(250, -640)
+[node name="Winner" type="Node2D" parent="Game/Board/Chess/ChessBoard" unique_id=765457608]
+position = Vector2(25.300001, -4.5)
+scale = Vector2(0.099999994, 0.099999994)
 
-[node name="TurnLabel" type="Label" parent="Board/Chess/Turn" unique_id=1037489614]
-offset_left = -14.0
-offset_top = 9.0
-offset_right = 170.0
-offset_bottom = 45.0
-theme_override_fonts/font = ExtResource("3_sxhdm")
-theme_override_font_sizes/font_size = 35
-text = "Turn: "
-
-[node name="TurnSprite" type="Sprite2D" parent="Board/Chess/Turn/TurnLabel" unique_id=2087152149]
-texture_filter = 1
-position = Vector2(51, 18)
-scale = Vector2(3, 3)
-texture = ExtResource("3_knkkn")
-offset = Vector2(20, 0)
-
-[node name="Winner" type="Node2D" parent="Board" unique_id=765457608]
-position = Vector2(253, -485)
-
-[node name="WinLabel" type="Label" parent="Board/Winner" unique_id=950989613]
+[node name="WinLabel" type="Label" parent="Game/Board/Chess/ChessBoard/Winner" unique_id=950989613]
 visible = false
 offset_left = -114.0
 offset_top = 4.0
@@ -75,45 +62,80 @@ theme_override_fonts/font = ExtResource("3_sxhdm")
 theme_override_font_sizes/font_size = 24
 text = "Winner: "
 
-[node name="WinnerSprite" type="Sprite2D" parent="Board/Winner/WinLabel" unique_id=1884471570]
+[node name="WinnerSprite" type="Sprite2D" parent="Game/Board/Chess/ChessBoard/Winner/WinLabel" unique_id=1884471570]
 texture_filter = 1
 position = Vector2(108, 11)
 scale = Vector2(3, 3)
 texture = ExtResource("3_knkkn")
 
-[node name="Center" type="Node2D" parent="Board" unique_id=1690605090]
-position = Vector2(220.00002, -220)
-scale = Vector2(-65.666664, 51.75)
+[node name="Turn" type="Node2D" parent="Game/Board/Chess/ChessBoard" unique_id=215137941]
+position = Vector2(46.999996, 2)
+scale = Vector2(0.099999994, 0.099999994)
 
-[node name="Camera2D" type="Camera2D" parent="Board/Center" unique_id=1267078878]
+[node name="TurnLabel" type="Label" parent="Game/Board/Chess/ChessBoard/Turn" unique_id=1037489614]
+offset_left = -14.0
+offset_top = 9.0
+offset_right = 170.0
+offset_bottom = 45.0
+theme_override_fonts/font = ExtResource("3_sxhdm")
+theme_override_font_sizes/font_size = 35
+text = "Turn: "
 
-[node name="Control" type="Control" parent="." unique_id=1927025280]
+[node name="TurnSprite" type="Sprite2D" parent="Game/Board/Chess/ChessBoard/Turn/TurnLabel" unique_id=2087152149]
+texture_filter = 1
+position = Vector2(51, 18)
+scale = Vector2(3, 3)
+texture = ExtResource("3_knkkn")
+offset = Vector2(20, 0)
+
+[node name="Cards" type="Node2D" parent="Game/Board" unique_id=1740117524]
+position = Vector2(220, 67)
+
+[node name="Hand" type="HBoxContainer" parent="Game/Board/Cards" unique_id=158415301]
+offset_left = -108.0
+offset_top = -46.0
+offset_right = -68.0
+offset_bottom = -6.0
+scale = Vector2(5.645, 2.685)
+script = ExtResource("7_i4aq4")
+
+[node name="Cards" type="Node2D" parent="Game/Board/Cards/Hand" unique_id=2118670999]
+
+[node name="Center" type="Node2D" parent="Game/Board" unique_id=1690605090]
+position = Vector2(220, -220.00002)
+rotation = 3.1415927
+scale = Vector2(65.666664, -51.749996)
+
+[node name="Camera2D" type="Camera2D" parent="Game/Board/Center" unique_id=1267078878]
+zoom = Vector2(0.8, 0.8)
+
+[node name="MultiplayerUI" type="Control" parent="." unique_id=1927025280]
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 script = ExtResource("6_pl8e4")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Control" unique_id=1712686716]
+[node name="VBoxContainer" type="VBoxContainer" parent="MultiplayerUI" unique_id=1712686716]
 layout_mode = 0
 offset_left = -322.0
 offset_top = -516.0
 offset_right = -215.0
 offset_bottom = -432.0
 
-[node name="Server" type="Button" parent="Control/VBoxContainer" unique_id=1569551917]
+[node name="Server" type="Button" parent="MultiplayerUI/VBoxContainer" unique_id=1569551917]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("3_sxhdm")
 theme_override_font_sizes/font_size = 18
 text = "Create game"
 
-[node name="Client" type="Button" parent="Control/VBoxContainer" unique_id=1179895108]
+[node name="Client" type="Button" parent="MultiplayerUI/VBoxContainer" unique_id=1179895108]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("3_sxhdm")
 theme_override_font_sizes/font_size = 18
 text = "Join game"
 
-[node name="IpBox" type="LineEdit" parent="Control/VBoxContainer" unique_id=334783057 groups=["IpBox"]]
+[node name="IpBox" type="LineEdit" parent="MultiplayerUI/VBoxContainer" unique_id=334783057 groups=["IpBox"]]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("3_sxhdm")
 theme_override_font_sizes/font_size = 13
@@ -125,5 +147,5 @@ spawn_path = NodePath("..")
 script = ExtResource("7_is6ib")
 network_player = ExtResource("8_b3i5h")
 
-[connection signal="pressed" from="Control/VBoxContainer/Server" to="Control" method="_on_server_pressed"]
-[connection signal="pressed" from="Control/VBoxContainer/Client" to="Control" method="_on_client_pressed"]
+[connection signal="pressed" from="MultiplayerUI/VBoxContainer/Server" to="MultiplayerUI" method="_on_server_pressed"]
+[connection signal="pressed" from="MultiplayerUI/VBoxContainer/Client" to="MultiplayerUI" method="_on_client_pressed"]
