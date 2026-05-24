@@ -9,12 +9,14 @@ var connection_timer: float = 0.0
 var connecting := false
 const TIMEOUT := 5.0
 
+var game_manager
 
 func _ready():
 	multiplayer.connected_to_server.connect(_on_connected)
 	multiplayer.connection_failed.connect(_on_failed)
 	multiplayer.server_disconnected.connect(_on_disconnected)
-
+	
+	game_manager = get_tree().get_nodes_in_group("GameManager")
 
 func start_server() -> void:
 	peer = ENetMultiplayerPeer.new()

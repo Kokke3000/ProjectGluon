@@ -1,0 +1,73 @@
+[gd_scene format=3 uid="uid://bqunqjflu3cwf"]
+
+[ext_resource type="Texture2D" uid="uid://ixkhf7afn6k3" path="res://Sprites/Chess/ChessBoardWIP.png" id="1_b823p"]
+[ext_resource type="Script" uid="uid://hhm3webcpm6r" path="res://Scripts/Chess/chess.gd" id="2_rgfty"]
+[ext_resource type="FontFile" uid="uid://whyl825ilp7w" path="res://Fonts/pixel_operator/PixelOperatorMono-Bold.ttf" id="3_dnge0"]
+[ext_resource type="Texture2D" uid="uid://cf2mtqbwi7cc" path="res://Sprites/Chess/Pieces/white_pawn.png" id="4_246in"]
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_b3i5h"]
+properties/0/path = NodePath("Game/Board/Chess/ChessBoard:board")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+properties/1/path = NodePath("Game/Board/Chess/ChessBoard:white")
+properties/1/spawn = true
+properties/1/replication_mode = 1
+
+[node name="Chess" type="Node2D" unique_id=1697835694]
+position = Vector2(220, 220)
+
+[node name="ChessBoard" type="Sprite2D" parent="." unique_id=1949720590]
+texture_filter = 1
+position = Vector2(-220.00002, -660)
+scale = Vector2(10, 10)
+texture = ExtResource("1_b823p")
+centered = false
+script = ExtResource("2_rgfty")
+
+[node name="Pieces" type="Node2D" parent="ChessBoard" unique_id=597172285]
+
+[node name="Dots" type="Node2D" parent="ChessBoard" unique_id=1633015956]
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="ChessBoard" unique_id=781236235]
+root_path = NodePath("../../../../..")
+replication_config = SubResource("SceneReplicationConfig_b3i5h")
+
+[node name="Winner" type="Node2D" parent="ChessBoard" unique_id=72115587]
+position = Vector2(25.300001, -4.5)
+scale = Vector2(0.099999994, 0.099999994)
+
+[node name="WinLabel" type="Label" parent="ChessBoard/Winner" unique_id=1569127876]
+visible = false
+offset_left = -114.0
+offset_top = 4.0
+offset_right = 57.0
+offset_bottom = 28.0
+theme_override_fonts/font = ExtResource("3_dnge0")
+theme_override_font_sizes/font_size = 24
+text = "Winner: "
+
+[node name="WinnerSprite" type="Sprite2D" parent="ChessBoard/Winner/WinLabel" unique_id=1983098907]
+texture_filter = 1
+position = Vector2(108, 11)
+scale = Vector2(3, 3)
+texture = ExtResource("4_246in")
+
+[node name="Turn" type="Node2D" parent="ChessBoard" unique_id=1753923648]
+position = Vector2(46.999996, 2)
+scale = Vector2(0.099999994, 0.099999994)
+
+[node name="TurnLabel" type="Label" parent="ChessBoard/Turn" unique_id=559051626]
+offset_left = -14.0
+offset_top = 9.0
+offset_right = 170.0
+offset_bottom = 45.0
+theme_override_fonts/font = ExtResource("3_dnge0")
+theme_override_font_sizes/font_size = 35
+text = "Turn: "
+
+[node name="TurnSprite" type="Sprite2D" parent="ChessBoard/Turn/TurnLabel" unique_id=935206441]
+texture_filter = 1
+position = Vector2(51, 18)
+scale = Vector2(3, 3)
+texture = ExtResource("4_246in")
+offset = Vector2(20, 0)

@@ -2,12 +2,23 @@
 
 [ext_resource type="Texture2D" uid="uid://ur4qh7g8vejs" path="res://Sprites/PlayingCards/Background.png" id="1_i5ppd"]
 [ext_resource type="Script" uid="uid://tehp8rm2yrgq" path="res://Scripts/PlayingCards/PlayingCard.gd" id="2_6823m"]
+[ext_resource type="FontFile" uid="uid://whyl825ilp7w" path="res://Fonts/pixel_operator/PixelOperatorMono-Bold.ttf" id="3_wexif"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wexif"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5mjf8"]
+bg_color = Color(0, 0, 0, 0.6313726)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rypts"]
+bg_color = Color(0, 0, 0, 0.34509805)
 
 [node name="PlayingCard" type="Panel" unique_id=567946238]
-offset_left = -61.0
-offset_top = -89.0
-offset_right = -21.0
-offset_bottom = -49.0
+texture_filter = 1
+offset_left = -62.0
+offset_top = -88.0
+offset_right = -22.0
+offset_bottom = -48.0
 scale = Vector2(3, 4.5)
 script = ExtResource("2_6823m")
 
@@ -17,13 +28,47 @@ position = Vector2(20, 20)
 scale = Vector2(1.5, 1)
 texture = ExtResource("1_i5ppd")
 
-[node name="CardNumber" type="Label" parent="CardSprite" unique_id=585718735]
-offset_right = 40.0
-offset_bottom = 23.0
+[node name="CardNumber" type="Label" parent="CardSprite" unique_id=61164802]
+texture_filter = 2
+offset_left = -19.555557
+offset_top = -16.0
+offset_right = 20.444443
+offset_bottom = 16.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("3_wexif")
+theme_override_font_sizes/font_size = 17
+text = "10"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="CardEffect" type="Label" parent="CardSprite" unique_id=851314665]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -34.88889
+offset_top = -40.22222
+offset_right = 5.1111107
+offset_bottom = -17.222221
+grow_horizontal = 2
+pivot_offset = Vector2(19.335, 0)
+theme_override_fonts/font = ExtResource("3_wexif")
+theme_override_font_sizes/font_size = 4
+text = "Play: You may move two pawns this turn"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
 
 [node name="PlayCardButton" type="Button" parent="CardSprite" unique_id=827807168]
-offset_left = -9.333333
-offset_top = -14.666667
-offset_right = -1.333333
-offset_bottom = -6.666667
+texture_filter = 1
+offset_left = -10.0
+offset_top = -15.999998
+offset_right = -1.3810081
+offset_bottom = -7.3464394
 scale = Vector2(2.3204567, 3.6979005)
+theme_override_styles/normal = SubResource("StyleBoxFlat_wexif")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_5mjf8")
+theme_override_styles/hover = SubResource("StyleBoxFlat_rypts")
+
+[connection signal="mouse_entered" from="CardSprite/PlayCardButton" to="." method="_on_play_card_button_mouse_entered"]
+[connection signal="mouse_exited" from="CardSprite/PlayCardButton" to="." method="_on_play_card_button_mouse_exited"]
+[connection signal="pressed" from="CardSprite/PlayCardButton" to="." method="_on_play_card_button_pressed"]
