@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://bqunqjflu3cwf"]
 
 [ext_resource type="Texture2D" uid="uid://ixkhf7afn6k3" path="res://Sprites/Chess/ChessBoardWIP.png" id="1_b823p"]
-[ext_resource type="Script" uid="uid://hhm3webcpm6r" path="res://Scripts/Chess/chess.gd" id="2_rgfty"]
+[ext_resource type="Script" uid="uid://hhm3webcpm6r" path="res://Scripts/Games/Chess/Chess.gd" id="2_rgfty"]
 [ext_resource type="FontFile" uid="uid://whyl825ilp7w" path="res://Fonts/pixel_operator/PixelOperatorMono-Bold.ttf" id="3_dnge0"]
 [ext_resource type="Texture2D" uid="uid://cf2mtqbwi7cc" path="res://Sprites/Chess/Pieces/white_pawn.png" id="4_246in"]
 

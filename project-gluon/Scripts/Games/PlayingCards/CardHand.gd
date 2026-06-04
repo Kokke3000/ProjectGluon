@@ -8,7 +8,7 @@ var player_hands := {}
 
 var hand : Array = []
 
-# Find out what two games are being played
+# Game Id's
 var MyGameId : int = 2
 var OtherGame : int
 
@@ -16,31 +16,36 @@ var OtherGame : int
 var ChessBoard
 var white: bool
 
+var GameManager
+
 #### Creating cards ####
 
 func _ready() -> void:
 	if multiplayer.is_server():
 		multiplayer.peer_connected.connect(_on_peer_connected)
-	OtherGame = find_other_game()
+		
+	GameManager = get_tree().get_nodes_in_group("GameManager")[0]
+	if GameManager.games.has(MyGameId):
+		OtherGame = find_other_game()
 	
 	# Things required for combining with:
 		# Chess:
 	if OtherGame == 1:
 		ChessBoard = get_tree().get_nodes_in_group("ChessBoard")[0]
+		# Terrain pieces:
+	
 
 func find_other_game():
-	# Get the game manager
-	var GameManager = get_tree().get_nodes_in_group("GameManager")[0]
-	
 	# Check for other game
 	if GameManager:
 		if GameManager.games[0] == MyGameId:
 			return GameManager.games[1]
 		elif GameManager.games[1] == MyGameId:
 			return GameManager.games[0]
+		return null
 
 func _process(delta) -> void:
-	if ChessBoard:
+	if OtherGame == 1 and ChessBoard:
 		white = ChessBoard.white
 		
 # When client connects -> Deal both hands

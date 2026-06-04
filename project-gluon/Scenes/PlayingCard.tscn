@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://bwcj8pncyiuk4"]
 
 [ext_resource type="Texture2D" uid="uid://ur4qh7g8vejs" path="res://Sprites/PlayingCards/Background.png" id="1_i5ppd"]
-[ext_resource type="Script" uid="uid://tehp8rm2yrgq" path="res://Scripts/PlayingCards/PlayingCard.gd" id="2_6823m"]
+[ext_resource type="Script" uid="uid://tehp8rm2yrgq" path="res://Scripts/Games/PlayingCards/PlayingCard.gd" id="2_6823m"]
 [ext_resource type="FontFile" uid="uid://whyl825ilp7w" path="res://Fonts/pixel_operator/PixelOperatorMono-Bold.ttf" id="3_wexif"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wexif"]

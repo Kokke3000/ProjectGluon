@@ -12,10 +12,6 @@ func update(type) -> void:
 	card_number.text = str(type)
 	card_type = type
 
-## Chess ##
-func _on_play_card_button_mouse_entered() -> void:
-	card_effect.visible = true
-	
 	match abs(card_type):
 		14:
 			card_effect.text = "King: Crown a new pawn as king, the old king is usurped"
@@ -33,6 +29,10 @@ func _on_play_card_button_mouse_entered() -> void:
 			card_effect.text = "Four: Designate a piece, it cannot be captured on the enemy's next turn"
 		4:  
 			card_effect.text = "Five: One of your non-knight pieces can move as a knight this turn"
+
+## Chess ##
+func _on_play_card_button_mouse_entered() -> void:
+	card_effect.visible = true
 
 
 

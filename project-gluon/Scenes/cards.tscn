@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://dk6fn4ionp0fl"]
 
-[ext_resource type="Script" uid="uid://pmp3nn7cbilw" path="res://Scripts/PlayingCards/CardHand.gd" id="1_xdaph"]
+[ext_resource type="Script" uid="uid://pmp3nn7cbilw" path="res://Scripts/Games/PlayingCards/CardHand.gd" id="1_xdaph"]
 
 [node name="Cards" type="Node2D" unique_id=305502740]
 position = Vector2(220, 67)

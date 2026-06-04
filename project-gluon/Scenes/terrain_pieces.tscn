@@ -1,0 +1,34 @@
+[gd_scene format=3 uid="uid://dab7qckas5uwf"]
+
+[ext_resource type="Script" uid="uid://byo3ttn0m455b" path="res://Scripts/Games/TerrainPieces/TerrainPieces.gd" id="1_c6nng"]
+
+[node name="TerrainPieces" type="Node2D" unique_id=414057502]
+script = ExtResource("1_c6nng")
+
+[node name="Hand" type="Control" parent="." unique_id=767614953]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="TabContainer" type="TabContainer" parent="Hand" unique_id=286154068]
+layout_mode = 0
+offset_left = -387.0
+offset_top = -275.0
+offset_right = -36.0
+offset_bottom = -34.0
+current_tab = 0
+
+[node name="TerrainHolder" type="GridContainer" parent="Hand/TabContainer" unique_id=1646859695]
+layout_direction = 2
+layout_mode = 2
+theme_override_constants/h_separation = 60
+theme_override_constants/v_separation = 65
+metadata/_tab_index = 0
+
+[node name="BuildingHolder" type="GridContainer" parent="Hand/TabContainer" unique_id=1842904543]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 1
+
+[node name="Board" type="Node2D" parent="." unique_id=1065200068]

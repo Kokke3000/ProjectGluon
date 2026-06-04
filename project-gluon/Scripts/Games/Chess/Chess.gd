@@ -60,8 +60,11 @@ var check : bool = false
 
 var previous_board : Array = []
 
+# Game ID's
 var OtherGame : int
 var MyGameId : int = 1
+
+var GameManager
 
 func _ready() -> void:
 
@@ -81,19 +84,19 @@ func _ready() -> void:
 
 		setup_board()
 	
-	OtherGame = find_other_game()
+	GameManager = get_tree().get_nodes_in_group("GameManager")[0]
+	if GameManager.games.has(MyGameId):
+		OtherGame = find_other_game()
 
 func find_other_game():
-	# Get the game manager
-	var GameManager = get_tree().get_nodes_in_group("GameManager")[0]
-	
 	# Check for other game
 	if GameManager:
 		if GameManager.games[0] == MyGameId:
 			return GameManager.games[1]
 		elif GameManager.games[1] == MyGameId:
 			return GameManager.games[0]
-
+		return null
+		
 func _process(delta):
 	
 	if white:

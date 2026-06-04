@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://cl2w848d1wp1w"]
 
-[ext_resource type="Script" uid="uid://doo3nx7w1inrb" path="res://Scripts/Chess/ChessPiece.gd" id="1_tpl2v"]
+[ext_resource type="Script" uid="uid://doo3nx7w1inrb" path="res://Scripts/Games/Chess/ChessPiece.gd" id="1_tpl2v"]
 
 [node name="piece_holder" type="Sprite2D" unique_id=1443946887]
 script = ExtResource("1_tpl2v")

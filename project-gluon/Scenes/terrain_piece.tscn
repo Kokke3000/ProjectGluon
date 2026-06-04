@@ -1,0 +1,37 @@
+[gd_scene format=3 uid="uid://cg5p5baacg6gx"]
+
+[ext_resource type="Script" uid="uid://bffi3wapvxeqs" path="res://Scripts/Games/TerrainPieces/TerrainPiece.gd" id="1_248ro"]
+[ext_resource type="Texture2D" uid="uid://eniaq1x4imje" path="res://Sprites/TerrainPieces/plains.png" id="1_su7bq"]
+[ext_resource type="FontFile" uid="uid://whyl825ilp7w" path="res://Fonts/pixel_operator/PixelOperatorMono-Bold.ttf" id="2_248ro"]
+
+[node name="terrain_piece" type="Control" unique_id=831777676]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -8.0
+offset_top = -4.0
+offset_right = -8.0
+offset_bottom = -4.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_248ro")
+
+[node name="Sprite" type="TextureRect" parent="." unique_id=1433793679]
+texture_filter = 1
+layout_mode = 0
+offset_left = 8.0
+offset_top = 4.0
+offset_right = 48.0
+offset_bottom = 44.0
+texture = ExtResource("1_su7bq")
+
+[node name="PieceName" type="Label" parent="." unique_id=1078337080]
+layout_mode = 0
+offset_left = 4.0
+offset_top = 45.0
+offset_right = 52.0
+offset_bottom = 61.0
+theme_override_fonts/font = ExtResource("2_248ro")
+text = "Plains"
+horizontal_alignment = 1

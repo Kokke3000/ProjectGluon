@@ -4,13 +4,15 @@ extends Node2D
 
 const chess = preload("res://Scenes/chess.tscn")
 const cards = preload("res://Scenes/cards.tscn")
+const terrainPieces = preload("res://Scenes/terrain_pieces.tscn")
 
 # Game ID's
 # 1: Chess
 # 2: Cards
+# 3: Terrain pieces
 
 var game1 : int = 1
-var game2 : int = 2
+var game2 : int = 3
 var games : Array
 
 @rpc("any_peer")
@@ -25,7 +27,9 @@ func _ready() -> void:
 		2:
 			var new_cards = cards.instantiate()
 			board.add_child(new_cards)
-			
+		3: 
+			var new_terrain_pieces = terrainPieces.instantiate()
+			board.add_child(new_terrain_pieces)
 	## Second game ##
 	match abs(game2):
 		1:
@@ -34,6 +38,9 @@ func _ready() -> void:
 		2:
 			var new_cards = cards.instantiate()
 			board.add_child(new_cards)
+		3: 
+			var new_terrain_pieces = terrainPieces.instantiate()
+			board.add_child(new_terrain_pieces)
 
 		
 
