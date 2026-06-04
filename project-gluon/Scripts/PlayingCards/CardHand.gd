@@ -6,43 +6,78 @@ var player_hands := {}
 
 @onready var card_hand: HBoxContainer = self
 
-var hand: Array = []
+var hand : Array = []
+
+# Find out what two games are being played
+var MyGameId : int = 2
+var OtherGame : int
+
+# Chess variables
+var ChessBoard
+var white: bool
 
 #### Creating cards ####
 
 func _ready() -> void:
 	if multiplayer.is_server():
 		multiplayer.peer_connected.connect(_on_peer_connected)
-
-		var host_id = multiplayer.get_unique_id()
-		give_cards(host_id, 3)
-
-func _on_peer_connected(id: int) -> void:
-	print("Peer joined:" , id)
-
-	player_hands[id] = []
-	give_cards(id, 3)
+	OtherGame = find_other_game()
 	
-func give_cards(peer_id: int, amount: int) -> void:
-	if !player_hands.has(peer_id):
-		player_hands[peer_id] = []
+	# Things required for combining with:
+		# Chess:
+	if OtherGame == 1:
+		ChessBoard = get_tree().get_nodes_in_group("ChessBoard")[0]
+
+func find_other_game():
+	# Get the game manager
+	var GameManager = get_tree().get_nodes_in_group("GameManager")[0]
+	
+	# Check for other game
+	if GameManager:
+		if GameManager.games[0] == MyGameId:
+			return GameManager.games[1]
+		elif GameManager.games[1] == MyGameId:
+			return GameManager.games[0]
+
+func _process(delta) -> void:
+	if ChessBoard:
+		white = ChessBoard.white
+		
+# When client connects -> Deal both hands
+func _on_peer_connected(player_id: int) -> void:
+	print("Peer joined:" , player_id)
+	
+	# Deal client hand
+	player_hands[player_id] = []
+	give_cards(player_id, 3)
+	
+	# Deal host hand
+	var host_id = 1
+	give_cards(host_id, 3)
+	
+# Deals out starting cards
+# Otherwise card giving handled by add_card
+func give_cards(player_id: int, amount: int) -> void:
+	if !player_hands.has(player_id):
+		player_hands[player_id] = []
+		print(player_hands[player_id])
 
 	# already dealt
-	if player_hands[peer_id].size() > 0:
+	if player_hands[player_id].size() > 0:
 		return
 
 	for i in amount:
 		var card := randi_range(1, 14)
 
-		player_hands[peer_id].append(card)
-		rpc_id(peer_id, "receive_card", card)
+		player_hands[player_id].append(card)
+		rpc_id(player_id, "receive_card", card)
 
-func add_card(id, card_type):
-	if !player_hands.has(id):
-		player_hands[id] = []
+func add_card(player_id, card_type):
+	if !player_hands.has(player_id):
+		player_hands[player_id] = []
 
-	player_hands[id].append(card_type)
-	rpc_id(id, "receive_card", card_type)
+	player_hands[player_id].append(card_type)
+	rpc_id(player_id, "receive_card", card_type)
 
 
 @rpc("authority", "call_local")
@@ -79,34 +114,31 @@ func request_play_card(card_type: int) -> void:
 
 @rpc("authority", "call_local")
 func resolve_played_card(player_id: int, card_type: int) -> void:
-	print("Player ", player_id, " played ", card_type)
-
 	# only redraw your own hand
 	if player_id == multiplayer.get_unique_id():
-		update_cards(player_id)
+		update_cards()
+	
+	if player_id == multiplayer.get_unique_id():
+		hand.erase(card_type)
+		update_cards()
 
 
-func player_has_card(id, card_type) -> bool:
+func player_has_card(player_id, card_type) -> bool:
 	return (
-		player_hands.has(id) and card_type in player_hands[id]
+		player_hands.has(player_id) and card_type in player_hands[player_id]
 	)
 
+func remove_card_from_hand(player_id, card_type) -> void:
+	if player_hands.has(player_id):
+		player_hands[player_id].erase(card_type)
 
-func remove_card_from_hand(id, card_type) -> void:
-	if player_hands.has(id):
-		player_hands[id].erase(card_type)
+func update_cards():
+	for child in get_children():
+		child.queue_free()
 
-
-func apply_card(id, card_type) -> void:
-	print("Player ", id, " played card: ", card_type)
-
-
-func update_cards(id):
-	# clear cards
-	for n in get_children():
-		n.queue_free()
-	
-	# add remaining ones back
-	for card in player_hands[id]:
+	for card in hand:
 		create_card(card)
+
+func apply_card(player_id, card_type) -> void:
+	print("Player ", player_id, " played card: ", card_type)
 	

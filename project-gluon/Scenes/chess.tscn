@@ -16,7 +16,7 @@ properties/1/replication_mode = 1
 [node name="Chess" type="Node2D" unique_id=1697835694]
 position = Vector2(220, 220)
 
-[node name="ChessBoard" type="Sprite2D" parent="." unique_id=1949720590]
+[node name="ChessBoard" type="Sprite2D" parent="." unique_id=1949720590 groups=["ChessBoard"]]
 texture_filter = 1
 position = Vector2(-220.00002, -660)
 scale = Vector2(10, 10)
@@ -28,7 +28,7 @@ script = ExtResource("2_rgfty")
 
 [node name="Dots" type="Node2D" parent="ChessBoard" unique_id=1633015956]
 
-[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="ChessBoard" unique_id=781236235]
+[node name="ChessSync" type="MultiplayerSynchronizer" parent="ChessBoard" unique_id=781236235]
 root_path = NodePath("../../../../..")
 replication_config = SubResource("SceneReplicationConfig_b3i5h")
 

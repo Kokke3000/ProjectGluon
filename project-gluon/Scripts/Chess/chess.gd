@@ -60,6 +60,9 @@ var check : bool = false
 
 var previous_board : Array = []
 
+var OtherGame : int
+var MyGameId : int = 1
+
 func _ready() -> void:
 
 	add_to_group("chess_board")
@@ -77,6 +80,19 @@ func _ready() -> void:
 		board = []
 
 		setup_board()
+	
+	OtherGame = find_other_game()
+
+func find_other_game():
+	# Get the game manager
+	var GameManager = get_tree().get_nodes_in_group("GameManager")[0]
+	
+	# Check for other game
+	if GameManager:
+		if GameManager.games[0] == MyGameId:
+			return GameManager.games[1]
+		elif GameManager.games[1] == MyGameId:
+			return GameManager.games[0]
 
 func _process(delta):
 	

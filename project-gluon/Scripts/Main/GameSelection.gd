@@ -11,10 +11,12 @@ const cards = preload("res://Scenes/cards.tscn")
 
 var game1 : int = 1
 var game2 : int = 2
+var games : Array
 
 @rpc("any_peer")
 func _ready() -> void:
 	
+	games = [game1, game2]
 	## First game ##
 	match abs(game1):
 		1:
