@@ -38,8 +38,8 @@ script = ExtResource("6_pl8e4")
 layout_mode = 0
 offset_left = -321.0
 offset_top = -516.0
-offset_right = -214.0
-offset_bottom = -432.0
+offset_right = -188.5
+offset_bottom = -392.0
 scale = Vector2(2, 2)
 
 [node name="Server" type="Button" parent="MultiplayerUI/VBoxContainer" unique_id=1569551917]
@@ -60,6 +60,59 @@ theme_override_fonts/font = ExtResource("3_sxhdm")
 theme_override_font_sizes/font_size = 13
 placeholder_text = "eg. 192.168.x.x"
 
+[node name="Status" type="Label" parent="MultiplayerUI/VBoxContainer" unique_id=1094990474 groups=["StatusBox"]]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_sxhdm")
+theme_override_font_sizes/font_size = 11
+text = "Status: Not connected"
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="GameSelection" type="Control" parent="." unique_id=477645000]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Label" type="Label" parent="GameSelection" unique_id=1860573010]
+layout_mode = 0
+offset_left = 96.0
+offset_top = -421.0
+offset_right = 324.0
+offset_bottom = -342.0
+theme_override_fonts/font = ExtResource("3_sxhdm")
+theme_override_font_sizes/font_size = 38
+text = "Choose your \"weapon\""
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="GameSelection" unique_id=1931200513]
+layout_mode = 0
+offset_left = 93.0
+offset_top = -332.0
+offset_right = 326.0
+offset_bottom = -150.0
+theme_override_constants/separation = 6
+
+[node name="SelectChess" type="Button" parent="GameSelection/VBoxContainer" unique_id=212768068]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_sxhdm")
+theme_override_font_sizes/font_size = 25
+text = "Chess pieces"
+
+[node name="SelectCards" type="Button" parent="GameSelection/VBoxContainer" unique_id=799020478]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_sxhdm")
+theme_override_font_sizes/font_size = 25
+text = "Playing cards"
+
+[node name="SelectTerrain" type="Button" parent="GameSelection/VBoxContainer" unique_id=1704081335]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_sxhdm")
+theme_override_font_sizes/font_size = 25
+text = "Terrain pieces"
+
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="." unique_id=1982978390]
 _spawnable_scenes = PackedStringArray("uid://nirler3qtnjm")
 spawn_path = NodePath("..")
@@ -68,3 +121,6 @@ network_player = ExtResource("8_b3i5h")
 
 [connection signal="pressed" from="MultiplayerUI/VBoxContainer/Server" to="MultiplayerUI" method="_on_server_pressed"]
 [connection signal="pressed" from="MultiplayerUI/VBoxContainer/Client" to="MultiplayerUI" method="_on_client_pressed"]
+[connection signal="pressed" from="GameSelection/VBoxContainer/SelectChess" to="Game" method="_on_select_chess_pressed"]
+[connection signal="pressed" from="GameSelection/VBoxContainer/SelectCards" to="Game" method="_on_select_cards_pressed"]
+[connection signal="pressed" from="GameSelection/VBoxContainer/SelectTerrain" to="Game" method="_on_select_terrain_pressed"]
