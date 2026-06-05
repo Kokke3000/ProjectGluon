@@ -12,7 +12,7 @@ const terrainPieces = preload("res://Scenes/terrain_pieces.tscn")
 # 3: Terrain pieces
 
 var game1 : int = 1
-var game2 : int = 3
+var game2 : int = 2
 var games : Array
 
 @rpc("any_peer")

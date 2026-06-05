@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://dab7qckas5uwf"]
 
 [ext_resource type="Script" uid="uid://byo3ttn0m455b" path="res://Scripts/Games/TerrainPieces/TerrainPieces.gd" id="1_c6nng"]
+[ext_resource type="FontFile" uid="uid://whyl825ilp7w" path="res://Fonts/pixel_operator/PixelOperatorMono-Bold.ttf" id="2_6otk7"]
 
 [node name="TerrainPieces" type="Node2D" unique_id=414057502]
 script = ExtResource("1_c6nng")
@@ -11,6 +12,18 @@ anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
+[node name="TerrainInfo" type="Label" parent="Hand" unique_id=400287376 groups=["TerrainInfoBox"]]
+layout_mode = 0
+offset_left = -387.0
+offset_top = -398.0
+offset_right = -33.0
+offset_bottom = -298.0
+theme_override_fonts/font = ExtResource("2_6otk7")
+theme_override_font_sizes/font_size = 20
+text = "Lake: Only bishops can pass through the lake, as they can walk on water"
+vertical_alignment = 1
+autowrap_mode = 2
+
 [node name="TabContainer" type="TabContainer" parent="Hand" unique_id=286154068]
 layout_mode = 0
 offset_left = -387.0
@@ -19,16 +32,28 @@ offset_right = -36.0
 offset_bottom = -34.0
 current_tab = 0
 
-[node name="TerrainHolder" type="GridContainer" parent="Hand/TabContainer" unique_id=1646859695]
+[node name="Terrain" type="MarginContainer" parent="Hand/TabContainer" unique_id=723282669]
+layout_mode = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 10
+metadata/_tab_index = 0
+
+[node name="TerrainHolder" type="GridContainer" parent="Hand/TabContainer/Terrain" unique_id=1646859695]
 layout_direction = 2
 layout_mode = 2
 theme_override_constants/h_separation = 60
 theme_override_constants/v_separation = 65
-metadata/_tab_index = 0
 
-[node name="BuildingHolder" type="GridContainer" parent="Hand/TabContainer" unique_id=1842904543]
+[node name="Buildings" type="MarginContainer" parent="Hand/TabContainer" unique_id=1014546098]
 visible = false
 layout_mode = 2
 metadata/_tab_index = 1
 
+[node name="BuildingHolder" type="GridContainer" parent="Hand/TabContainer/Buildings" unique_id=1842904543]
+layout_mode = 2
+
 [node name="Board" type="Node2D" parent="." unique_id=1065200068]
+
+[connection signal="mouse_exited" from="Hand/TerrainInfo" to="." method="_on_terrain_info_mouse_exited"]

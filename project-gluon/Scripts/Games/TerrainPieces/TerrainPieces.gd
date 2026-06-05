@@ -7,9 +7,10 @@ extends Node2D
 # 1: Tower
 
 
-@onready var terrain_holder: GridContainer = $Hand/TabContainer/TerrainHolder
-@onready var building_holder: GridContainer = $Hand/TabContainer/BuildingHolder
+@onready var terrain_holder: GridContainer = $Hand/TabContainer/Terrain/TerrainHolder
+@onready var building_holder: GridContainer = $Hand/TabContainer/Buildings/BuildingHolder
 
+@onready var terrain_info: Label = $Hand/TerrainInfo
 
 var player_pieces : Dictionary = {}
 var pieces : Array
@@ -20,6 +21,8 @@ var terrain_piece = preload("res://Scenes/terrain_piece.tscn")
 func _ready() -> void:
 	if multiplayer.is_server():
 		multiplayer.peer_connected.connect(_on_peer_connected)
+		
+	terrain_info.visible = false
 
 # When client connects -> Deal both hands
 func _on_peer_connected(player_id: int) -> void:
@@ -43,7 +46,7 @@ func starting_pieces(player_id: int, amount: int) -> void:
 		return
 		
 	for i in amount:
-		var piece := randi_range(1, 3)
+		var piece := randi_range(1, 4)
 
 		player_pieces[player_id].append(piece)
 		rpc_id(player_id, "receive_piece", piece)

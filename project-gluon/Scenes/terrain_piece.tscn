@@ -4,6 +4,15 @@
 [ext_resource type="Texture2D" uid="uid://eniaq1x4imje" path="res://Sprites/TerrainPieces/plains.png" id="1_su7bq"]
 [ext_resource type="FontFile" uid="uid://whyl825ilp7w" path="res://Fonts/pixel_operator/PixelOperatorMono-Bold.ttf" id="2_248ro"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_248ro"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vaq6o"]
+bg_color = Color(0, 0, 0, 0.5686275)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dqyy0"]
+bg_color = Color(0, 0, 0, 0.35686275)
+
 [node name="terrain_piece" type="Control" unique_id=831777676]
 layout_mode = 3
 anchors_preset = 15
@@ -35,3 +44,16 @@ offset_bottom = 61.0
 theme_override_fonts/font = ExtResource("2_248ro")
 text = "Plains"
 horizontal_alignment = 1
+
+[node name="Button" type="Button" parent="." unique_id=257628519]
+layout_mode = 0
+offset_left = 8.0
+offset_top = 4.0
+offset_right = 48.0
+offset_bottom = 44.0
+theme_override_styles/normal = SubResource("StyleBoxFlat_248ro")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_vaq6o")
+theme_override_styles/hover = SubResource("StyleBoxFlat_dqyy0")
+
+[connection signal="mouse_entered" from="Button" to="." method="_on_button_mouse_entered"]
+[connection signal="mouse_exited" from="Button" to="." method="_on_button_mouse_exited"]
